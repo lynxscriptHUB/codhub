@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LynX HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:      #06020e;
+      --surface: #0d071e;
+      --border:  #251550;
+      --purple:  #7c3aed;
+      --violet:  #a855f7;
+      --neon:    #c084fc;
+      --pink:    #e879f9;
+      --text:    #ede9f8;
+      --muted:   #7560a8;
+      --online:  #34d399;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* NOISE */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: .4;
+    }
+
+    /* ORBS */
+    .orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(110px); pointer-events: none; z-index: 0;
+    }
+    .orb-1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, #5b21b645, transparent 70%);
+      top: -260px; left: -200px;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #7c3aed28, transparent 70%);
+      bottom: -100px; right: -120px;
+    }
+    .orb-3 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #a855f718, transparent 70%);
+      top: 55%; left: 55%;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    nav::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, #06020ef5 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.35rem;
+      letter-spacing: .08em; position: relative;
+      background: linear-gradient(130deg, #c084fc 30%, #7c3aed);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .logo em { font-style: normal; opacity: .45; font-weight: 400; }
+    .nav-links { position: relative; display: flex; gap: 36px; }
+    .nav-links a {
+      font-size: .8rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      letter-spacing: .1em; text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--neon); }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 140px 24px 100px;
+    }
+
+    /* spinning ring */
+    .hero-ring {
+      position: absolute;
+      width: min(700px, 90vw); height: min(700px, 90vw);
+      border-radius: 50%;
+      border: 1px solid #2d1a5e44;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: spin 40s linear infinite;
+    }
+    .hero-ring::before {
+      content: '';
+      position: absolute; inset: 32px;
+      border-radius: 50%;
+      border: 1px solid #2d1a5e22;
+    }
+    .hero-ring::after {
+      content: '';
+      position: absolute; top: -4px; left: 50%;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 16px var(--neon), 0 0 40px var(--violet);
+      transform: translateX(-50%);
+    }
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid #3b1a6e;
+      background: #1a0a3020;
+      padding: 7px 18px; border-radius: 99px;
+      font-size: .72rem; font-weight: 600;
+      color: var(--violet); letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 36px;
+      animation: fadeUp .6s ease both;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--online);
+      box-shadow: 0 0 10px var(--online);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(4.5rem, 14vw, 11rem);
+      line-height: .88;
+      letter-spacing: -.025em;
+      margin-bottom: 28px;
+      animation: fadeUp .7s .1s ease both;
+    }
+    .hero-title .t1 {
+      display: block; color: #fff;
+      text-shadow: 0 0 80px #7c3aed40;
+    }
+    .hero-title .t2 {
+      display: block;
+      background: linear-gradient(100deg, var(--purple) 10%, var(--pink) 70%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 40px #a855f755);
+    }
+
+    .hero-desc {
+      font-size: clamp(.95rem, 2vw, 1.1rem);
+      color: var(--muted); font-weight: 300; font-style: italic;
+      max-width: 420px; line-height: 1.65;
+      margin-bottom: 52px;
+      animation: fadeUp .7s .2s ease both;
+    }
+
+    /* CODE BOX */
+    .code-wrap {
+      width: 100%; max-width: 620px;
+      animation: fadeUp .7s .3s ease both;
+    }
+    .code-label {
+      font-size: .68rem; font-weight: 600;
+      color: var(--muted); letter-spacing: .14em; text-transform: uppercase;
+      text-align: left; margin-bottom: 10px; padding-left: 2px;
+    }
+    .code-box {
+      position: relative;
+      background: #080314;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px #1a0a3033 inset, 0 32px 80px #07030f88, 0 0 60px #5b21b618;
+      transition: box-shadow .3s, border-color .3s;
+    }
+    .code-box:hover {
+      border-color: #4b2090;
+      box-shadow: 0 0 0 1px #3b1a6e inset, 0 32px 80px #07030f99, 0 0 80px #7c3aed28;
+    }
+    .code-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid #1e0d3b;
+      background: #0b0620;
+    }
+    .code-dots { display: flex; gap: 7px; }
+    .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .code-dots span:nth-child(1) { background: #f8719455; }
+    .code-dots span:nth-child(2) { background: #fbbf2455; }
+    .code-dots span:nth-child(3) { background: #34d39955; }
+    .code-lang {
+      font-size: .68rem; color: #4b2090;
+      font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .code-body {
+      padding: 22px 22px 20px;
+      font-family: 'Fira Code', 'DM Mono', 'Courier New', monospace;
+      font-size: clamp(.78rem, 1.5vw, .9rem);
+      line-height: 1.5; color: #a78bfa;
+      word-break: break-all; white-space: pre-wrap;
+      user-select: all;
+    }
+    .syn-fn   { color: #c084fc; }
+    .syn-str  { color: #86efac; }
+    .syn-call { color: #f0abfc; }
+    .syn-punc { color: #6d5fa8; }
+    .code-footer {
+      padding: 14px 18px;
+      border-top: 1px solid #1e0d3b;
+      display: flex; justify-content: flex-end;
+    }
+    .copy-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 24px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--purple), var(--violet));
+      color: #fff; font-size: .82rem; font-weight: 600;
+      border: none; cursor: pointer;
+      box-shadow: 0 0 24px #7c3aed44;
+      transition: opacity .2s, transform .15s, box-shadow .2s;
+      letter-spacing: .04em;
+    }
+    .copy-btn:hover { opacity: .85; transform: scale(.97); }
+    .copy-btn.done {
+      background: linear-gradient(135deg, #065f46, #059669);
+      box-shadow: 0 0 24px #34d39944;
+    }
+
+    /* CTA */
+    .hero-cta {
+      margin-top: 40px;
+      animation: fadeUp .7s .4s ease both;
+    }
+    .btn-games {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 30px; border-radius: 10px;
+      border: 1px solid var(--border);
+      color: var(--muted); font-size: .88rem; font-weight: 500;
+      text-decoration: none;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-games:hover { border-color: var(--violet); color: var(--violet); background: #1a0a3020; }
+    .btn-games svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* STATS */
+    .stats {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat {
+      flex: 1; min-width: 140px;
+      padding: 32px 40px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      background: linear-gradient(130deg, var(--neon), var(--violet));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: block;
+    }
+    .stat-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .1em;
+      margin-top: 4px; display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      padding: 28px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer .logo-f {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
+      background: linear-gradient(130deg, #c084fc, #7c3aed);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    footer p { font-size: .75rem; color: var(--muted); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 120px 20px 80px; }
+      .stat { padding: 24px 20px; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <nav>
+    <div class="logo">LYNX<em>HUB</em></div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="../site games/index.html">Games</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-ring"></div>
+
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      HUB Online &amp; Updated
+    </div>
+
+    <h1 class="hero-title">
+      <span class="t1">LYNX</span>
+      <span class="t2">HUB</span>
+    </h1>
+
+    <p class="hero-desc">The evolution of Roblox scripts.<br>Power, precision and simplicity in one loadstring.</p>
+
+    <div class="code-wrap">
+      <p class="code-label">&#8627; Loadstring — paste into your executor</p>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">Luau</span>
+        </div>
+        <div class="code-body"><span class="syn-fn">loadstring</span><span class="syn-punc">(</span><span class="syn-call">game</span><span class="syn-punc">:</span><span class="syn-fn">HttpGet</span><span class="syn-punc">(</span><span class="syn-str">"https://pastebin.com/raw/KnFxXXvK"</span><span class="syn-punc">))()</span></div>
+        <div class="code-footer">
+          <button class="copy-btn" id="copy-btn">
+            <span>⎘</span>
+            <span id="copy-text">Copy Script</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="../site games/index.html" class="btn-games">
+        View Supported Games
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">6</span>
+      <span class="stat-label">Supported Games</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3</span>
+      <span class="stat-label">Online Scripts</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">24/7</span>
+      <span class="stat-label">Uptime</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">Free</span>
+      <span class="stat-label">Always</span>
+    </div>
+  </div>
+
+  <footer>
+    <span class="logo-f">LYNXHUB</span>
+    <p>&copy; 2026 LynX Scripts. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const btn  = document.getElementById('copy-btn');
+    const text = document.getElementById('copy-text');
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText('loadstring(game:HttpGet("https://pastebin.com/raw/KnFxXXvK"))()').then(() => {
+        text.innerText = 'Copied!';
+        btn.classList.add('done');
+        setTimeout(() => { text.innerText = 'Copy Script'; btn.classList.remove('done'); }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
