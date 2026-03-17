@@ -351,7 +351,7 @@
           <div class="code-dots"><span></span><span></span><span></span></div>
           <span class="code-lang">Luau</span>
         </div>
-        <div class="code-body"><span class="syn-fn">loadstring</span><span class="syn-punc">(</span><span class="syn-call">game</span><span class="syn-punc">:</span><span class="syn-fn">HttpGet</span><span class="syn-punc">(</span><span class="syn-str">"https://pastebin.com/raw/KnFxXXvK"</span><span class="syn-punc">))()</span></div>
+        <div class="code-body"><span class="syn-fn">loadstring</span><span class="syn-punc">(</span><span class="syn-call">game</span><span class="syn-punc">:</span><span class="syn-fn">HttpGet</span><span class="syn-punc">(</span><span class="syn-str">"https://raw.githubusercontent.com/lynxscriptHUB/lynxscriptshub/refs/heads/main/Loader.lua"</span><span class="syn-punc">))()</span></div>
         <div class="code-footer">
           <button class="copy-btn" id="copy-btn">
             <span>⎘</span>
@@ -397,7 +397,7 @@
     const btn  = document.getElementById('copy-btn');
     const text = document.getElementById('copy-text');
     btn.addEventListener('click', () => {
-      navigator.clipboard.writeText('loadstring(game:HttpGet("https://pastebin.com/raw/KnFxXXvK"))()').then(() => {
+      navigator.clipboard.writeText('loadstring(game:HttpGet("https://raw.githubusercontent.com/lynxscriptHUB/lynxscriptshub/refs/heads/main/Loader.lua"))()').then(() => {
         text.innerText = 'Copied!';
         btn.classList.add('done');
         setTimeout(() => { text.innerText = 'Copy Script'; btn.classList.remove('done'); }, 2000);
